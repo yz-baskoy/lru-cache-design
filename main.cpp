@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <string.h>
 #include <iostream>
+#include <string.h>
 #include <cmath>
 
 struct node {
@@ -8,7 +7,17 @@ struct node {
     struct node* next;
 };
 
+struct hashTable {
+    int* id;
+    int* status; // 0: boş, 1: dolu
+    int* links;
+    int* cache_status; // 0: cache'de değil, 1: cache'de
+    int size; 
+    int m;
+};
+
 typedef struct node node_t;
+typedef struct hashTable hashTable_t;
 
 void printlist(node_t *head) {
     node_t *temp = head;
@@ -30,7 +39,13 @@ int horner(std::string str) {
     return num;
 }
 
-int main(int argc, char const *argv[]) {
+int double_hash(int key, int i, int m) {
+    int h1 = key % m;
+    int h2 = 1 + (key % (m - 1));
+    return (h1 + i*h2) % m;
+}
 
+int main(int argc, char const *argv[]) {
+    
     return 0;
 }
