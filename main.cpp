@@ -42,7 +42,49 @@ int horner(std::string str) {
 int double_hash(int key, int i, int m) {
     int h1 = key % m;
     int h2 = 1 + (key % (m - 1));
+ 
     return (h1 + i*h2) % m;
+}
+
+hashTable_t createHashTable(int m) {
+	hashTable_t table;
+	table.id = new int[m];
+	table.status = new int[m];
+    table.links = new int[m];
+    table.cache_status = new int[m];
+    table.size = 0;
+    table.m = m;
+
+    return table;
+}
+
+void insertToHashTable(hashTable_t* table, int id, int link, int cache_status) {
+    int i = 0;
+    int index = double_hash(id, i, table->m);
+    while (table->status[index] == 1) {
+        i++;
+        index = double_hash(id, i, table->m);
+    }
+
+    table->id[index] = id;
+    table->links[index] = link;
+    table->cache_status[index] = cache_status;
+    table->status[index] = 1;
+    table->size++;
+}
+
+void removeFromHashTable(hashTable_t *table, int id) {
+    int i = 0;
+    int index = double_hash(id, i, table->m);
+    while (table->id[index] != id && i < table->m) {
+        i++;
+        index = double_hash(id, i, table->m);
+    }
+    if (table->id[index] == id) {
+        table->status[index] = 0;
+        table->cache_status[index] = 0;
+        table->size--;
+    }
 }
 
 int main(int argc, char const *argv[]) {
